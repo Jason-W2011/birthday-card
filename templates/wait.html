@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>尚未开放，请等待</title>
+    <style>
+        body{background:#111;color:#fff;text-align:center;margin-top:120px;font-size:24px}
+        #count{font-size:48px;color:#ff6644;margin:20px 0;}
+        .bottom-img{
+            margin-top: 80px; /* 和上方文字拉开距离 */
+            max-width: 600px; /* 最大宽度，防止图片过大 */
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <h1>看什么看，还没到时间呢</h1>
+    <div id="count"></div>
+    <p>开启时间：2026‑09‑22 00:00:00</p>
+
+    <!-- 页面最下方图片 -->
+    <img class="bottom-img" src="{{ url_for('static', filename='挑衅.jpeg') }}" alt="底部配图">
+
+<script>
+// 后端给的剩余时间（秒）
+let totalSecond = {{ remain.total_seconds()|int }};
+function update(){
+    if(totalSecond <=0){
+        // 倒计时结束，刷新页面，后端就会切到main页面
+        window.location.reload();
+        return;
+    }
+    let h = Math.floor(totalSecond / 3600);
+    let m = Math.floor((totalSecond %3600)/60);
+    let s = totalSecond %60;
+    document.getElementById("count").innerText =
+        `${h}时 ${m}分 ${s}秒`;
+    totalSecond--;
+    setTimeout(update,1000);
+}
+update();
+</script>
+</body>
+</html>
